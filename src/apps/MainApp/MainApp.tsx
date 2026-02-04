@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useDispatch } from "react-redux";
+
+import { useAppDispatch } from "src/shared/lib/storeHooks";
+
+import { Layout } from "src/components/Layout";
 
 import {
   ContactListPage,
@@ -8,15 +11,13 @@ import {
   FavoritesPage,
   GroupListPage,
   GroupPage,
-} from "../../pages";
+} from "src/pages";
 
-import type { AppDispatch } from "../../app/store/types";
-
-import { loadContacts } from "../../entities/contact/model/thunks";
-import { loadGroups } from "../../entities/group/model/thunks";
+import { loadContacts } from "src/entities/contact/model/thunks";
+import { loadGroups } from "src/entities/group/model/thunks";
 
 export function MainApp() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(loadContacts());
@@ -25,19 +26,21 @@ export function MainApp() {
 
   return (
     <Routes>
-      <Route path="/" element={<ContactListPage />} />
-
-      <Route path="/contacts">
+      <Route element={<Layout />}>
         <Route index element={<ContactListPage />} />
-        <Route path=":contactId" element={<ContactPage />} />
-      </Route>
 
-      <Route path="/groups">
-        <Route index element={<GroupListPage />} />
-        <Route path=":groupId" element={<GroupPage />} />
-      </Route>
+        <Route path="contacts">
+          <Route index element={<ContactListPage />} />
+          <Route path=":contactId" element={<ContactPage />} />
+        </Route>
 
-      <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="groups">
+          <Route index element={<GroupListPage />} />
+          <Route path=":groupId" element={<GroupPage />} />
+        </Route>
+
+        <Route path="favorites" element={<FavoritesPage />} />
+      </Route>
     </Routes>
   );
 }

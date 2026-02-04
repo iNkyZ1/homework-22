@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { StoreProvider } from "./app/providers/StoreProvider";
 import { MainApp } from "./apps/MainApp/MainApp";
+import "./index.scss";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
