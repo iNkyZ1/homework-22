@@ -2,7 +2,10 @@ export type Contact = {
   id: string;
   name: string;
   phone: string;
-  groupId: string;
+
+  address: string;
+  birthday: string;
+  photo: string;
 };
 
 export type ContactsState = {
