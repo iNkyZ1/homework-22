@@ -1,21 +1,24 @@
-import { useAppSelector } from "../shared/lib/storeHooks";
+import React, { memo } from "react";
+import { Col, Row, Alert } from "react-bootstrap";
 
-import { selectFavoriteContacts } from "../features/favorites/model/selectors";
+import { ContactCard } from "src/components/ContactCard";
+import { useAppSelector } from "src/shared/lib/storeHooks";
+import { selectFavoriteContacts } from "src/features/favorites/model/selectors";
 
-export function FavoritesPage() {
+export const FavoritesPage = memo(() => {
   const favorites = useAppSelector(selectFavoriteContacts);
 
   if (favorites.length === 0) {
-    return <p>Избранных контактов нет</p>;
+    return <Alert variant="secondary">Избранных контактов нет</Alert>;
   }
 
   return (
-    <ul>
+    <Row xxl={4} className="g-4">
       {favorites.map((contact) => (
-        <li key={contact.id}>
-          {contact.name} — {contact.phone}
-        </li>
+        <Col key={contact.id}>
+          <ContactCard contact={contact} withLink />
+        </Col>
       ))}
-    </ul>
+    </Row>
   );
-}
+});

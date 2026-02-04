@@ -1,27 +1,32 @@
-import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
+import React, { memo } from "react";
+import { Col, Row, Alert } from "react-bootstrap";
+
+import { GroupContactsCard } from "src/components/GroupContactsCard";
+
+import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 
 import {
   selectAllGroups,
   selectGroupsError,
   selectGroupsLoading,
-} from "../entities/group/model/selectors";
-import { loadGroups } from "../entities/group/model/thunks";
+} from "src/entities/group/model/selectors";
+import { loadGroups } from "src/entities/group/model/thunks";
 
-export function GroupListPage() {
+export const GroupListPage = memo(() => {
   const dispatch = useAppDispatch();
 
+  const groups = useAppSelector(selectAllGroups);
   const loading = useAppSelector(selectGroupsLoading);
   const error = useAppSelector(selectGroupsError);
-  const groups = useAppSelector(selectAllGroups);
 
   if (loading) {
-    return <p>Загрузка групп...</p>;
+    return <Alert variant="info">Загрузка групп...</Alert>;
   }
 
   if (error) {
     return (
       <div>
-        <p>Ошибка загрузки групп: {error}</p>
+        <Alert variant="danger">Ошибка загрузки групп: {error}</Alert>
         <button type="button" onClick={() => dispatch(loadGroups())}>
           Повторить
         </button>
@@ -29,15 +34,13 @@ export function GroupListPage() {
     );
   }
 
-  if (groups.length === 0) {
-    return <p>Группы отсутствуют</p>;
-  }
-
   return (
-    <ul>
+    <Row xxl={4} className="g-4">
       {groups.map((group) => (
-        <li key={group.id}>{group.name}</li>
+        <Col key={group.id}>
+          <GroupContactsCard groupContacts={group} />
+        </Col>
       ))}
-    </ul>
+    </Row>
   );
-}
+});
