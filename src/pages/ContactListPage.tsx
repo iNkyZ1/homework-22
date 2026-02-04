@@ -1,11 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectFilteredContacts } from "../entities/contact/model/selectors";
+import type { RootState, AppDispatch } from "../app/store/types";
+
+import {
+  selectContactsError,
+  selectContactsLoading,
+  selectFilteredContacts,
+} from "../entities/contact/model/selectors";
+import { loadContacts } from "../entities/contact/model/thunks";
+
 import { selectAllGroups } from "../entities/group/model/selectors";
 
 import {
-  selectContactsFilterName,
   selectContactsFilterGroupId,
+  selectContactsFilterName,
 } from "../features/contacts-filter/model/selectors";
 
 import {
@@ -14,10 +22,13 @@ import {
   setContactsFilterName,
 } from "../features/contacts-filter/model/actions";
 
-import type { RootState, AppDispatch } from "../app/store/types";
-
 export function ContactListPage() {
   const dispatch = useDispatch<AppDispatch>();
+
+  const loading = useSelector((state: RootState) =>
+    selectContactsLoading(state),
+  );
+  const error = useSelector((state: RootState) => selectContactsError(state));
 
   const contacts = useSelector((state: RootState) =>
     selectFilteredContacts(state),
@@ -30,6 +41,21 @@ export function ContactListPage() {
   const filterGroupId = useSelector((state: RootState) =>
     selectContactsFilterGroupId(state),
   );
+
+  if (loading) {
+    return <p>Загрузка контактов...</p>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Ошибка загрузки контактов: {error}</p>
+        <button type="button" onClick={() => dispatch(loadContacts())}>
+          Повторить
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
