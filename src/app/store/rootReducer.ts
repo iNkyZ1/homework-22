@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
-
-const __stubReducer = (state = null) => state;
+import { contactsReducer } from "../../entities/contact/model/reducer";
 
 export const rootReducer = combineReducers({
-  __stub: __stubReducer,
+  contacts: contactsReducer,
 });
