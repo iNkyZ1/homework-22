@@ -1,48 +1,43 @@
-import { useParams } from "react-router-dom";
+import React, { memo } from "react";
+import { Card, ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
+import type { Contact } from "src/entities/contact/model/types";
+import { FavoriteToggleButton } from "src/features/favorites/model/ui/FavoriteToggleButton";
 
-import {
-  selectContactById,
-  selectContactsError,
-  selectContactsLoading,
-} from "../entities/contact/model/selectors";
-import { loadContacts } from "../entities/contact/model/thunks";
-
-export function ContactPage() {
-  const { contactId } = useParams<{ contactId: string }>();
-  const dispatch = useAppDispatch();
-
-  const loading = useAppSelector(selectContactsLoading);
-  const error = useAppSelector(selectContactsError);
-
-  const contact = useAppSelector((state) =>
-    contactId ? selectContactById(state, contactId) : undefined,
-  );
-
-  if (loading) {
-    return <p>Загрузка контакта...</p>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p>Ошибка загрузки контактов: {error}</p>
-        <button type="button" onClick={() => dispatch(loadContacts())}>
-          Повторить
-        </button>
-      </div>
-    );
-  }
-
-  if (!contact) {
-    return <p>Контакт не найден</p>;
-  }
-
-  return (
-    <div>
-      <h2>{contact.name}</h2>
-      <p>Телефон: {contact.phone}</p>
-    </div>
-  );
+interface ContactCardProps {
+  contact: Contact;
+  withLink?: boolean;
 }
+
+export const ContactCard = memo<ContactCardProps>(
+  ({ contact: { photo, id, name, phone, birthday, address }, withLink }) => {
+    return (
+      <Card>
+        <Card.Img variant="top" src={photo} />
+
+        <Card.Body>
+          <Card.Title className="d-flex justify-content-between align-items-center">
+            <span>
+              {withLink ? <Link to={`/contacts/${id}`}>{name}</Link> : name}
+            </span>
+
+            <FavoriteToggleButton contactId={id} />
+          </Card.Title>
+
+          <Card.Body>
+            <ListGroup>
+              <ListGroup.Item>
+                <Link to={`tel:${phone}`} target="_blank">
+                  {phone}
+                </Link>
+              </ListGroup.Item>
+              <ListGroup.Item>{birthday}</ListGroup.Item>
+              <ListGroup.Item>{address}</ListGroup.Item>
+            </ListGroup>
+          </Card.Body>
+        </Card.Body>
+      </Card>
+    );
+  },
+);

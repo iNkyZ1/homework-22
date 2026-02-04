@@ -1,101 +1,81 @@
-import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
+import React, { memo } from "react";
+import { Alert, Col, Row } from "react-bootstrap";
+
+import { ContactCard } from "src/components/ContactCard";
+import { FilterForm, FilterFormValues } from "src/components/FilterForm";
+
+import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 
 import {
   selectContactsError,
   selectContactsLoading,
   selectFilteredContacts,
-} from "../entities/contact/model/selectors";
-import { loadContacts } from "../entities/contact/model/thunks";
+} from "src/entities/contact/model/selectors";
+import {
+  selectAllGroups,
+  selectGroupsError,
+  selectGroupsLoading,
+} from "src/entities/group/model/selectors";
 
-import { selectAllGroups } from "../entities/group/model/selectors";
-
+import {
+  setContactsFilterGroup,
+  setContactsFilterName,
+} from "src/features/contacts-filter/model/actions";
 import {
   selectContactsFilterGroupId,
   selectContactsFilterName,
-} from "../features/contacts-filter/model/selectors";
+} from "src/features/contacts-filter/model/selectors";
 
-import {
-  resetContactsFilter,
-  setContactsFilterGroup,
-  setContactsFilterName,
-} from "../features/contacts-filter/model/actions";
-
-export function ContactListPage() {
+export const ContactListPage = memo(() => {
   const dispatch = useAppDispatch();
 
-  const loading = useAppSelector(selectContactsLoading);
-  const error = useAppSelector(selectContactsError);
-
-  const contacts = useAppSelector(selectFilteredContacts);
   const groups = useAppSelector(selectAllGroups);
+  const contacts = useAppSelector(selectFilteredContacts);
 
   const filterName = useAppSelector(selectContactsFilterName);
   const filterGroupId = useAppSelector(selectContactsFilterGroupId);
 
-  if (loading) {
-    return <p>Загрузка контактов...</p>;
-  }
+  const contactsLoading = useAppSelector(selectContactsLoading);
+  const groupsLoading = useAppSelector(selectGroupsLoading);
+  const isLoading = contactsLoading || groupsLoading;
 
-  if (error) {
-    return (
-      <div>
-        <p>Ошибка загрузки контактов: {error}</p>
-        <button type="button" onClick={() => dispatch(loadContacts())}>
-          Повторить
-        </button>
-      </div>
-    );
-  }
+  const contactsError = useAppSelector(selectContactsError);
+  const groupsError = useAppSelector(selectGroupsError);
+  const error = contactsError || groupsError;
+
+  const onSubmit = (fv: Partial<FilterFormValues>) => {
+    dispatch(setContactsFilterName(fv.name ?? ""));
+    dispatch(setContactsFilterGroup(fv.groupId ? fv.groupId : null));
+  };
 
   return (
-    <div>
-      <h2>Все контакты</h2>
+    <Row xxl={1}>
+      <Col className="mb-3">
+        <FilterForm
+          groupContactsList={groups}
+          initialValues={{
+            name: filterName,
+            groupId: filterGroupId ?? "",
+          }}
+          onSubmit={onSubmit}
+        />
+      </Col>
 
-      <div
-        style={{ display: "grid", gap: 12, maxWidth: 420, marginBottom: 16 }}
-      >
-        <label>
-          Поиск по имени
-          <input
-            value={filterName}
-            onChange={(e) => dispatch(setContactsFilterName(e.target.value))}
-            placeholder="Введите имя..."
-          />
-        </label>
-
-        <label>
-          Группа
-          <select
-            value={filterGroupId ?? ""}
-            onChange={(e) =>
-              dispatch(setContactsFilterGroup(e.target.value || null))
-            }
-          >
-            <option value="">Все группы</option>
-            {groups.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
+      <Col>
+        {isLoading ? (
+          <Alert variant="info">Загрузка контактов...</Alert>
+        ) : error ? (
+          <Alert variant="danger">Ошибка: {error}</Alert>
+        ) : (
+          <Row xxl={4} className="g-4">
+            {contacts.map((contact) => (
+              <Col key={contact.id}>
+                <ContactCard contact={contact} withLink />
+              </Col>
             ))}
-          </select>
-        </label>
-
-        <button type="button" onClick={() => dispatch(resetContactsFilter())}>
-          Сбросить фильтры
-        </button>
-      </div>
-
-      {contacts.length === 0 ? (
-        <p>Контакты отсутствуют</p>
-      ) : (
-        <ul>
-          {contacts.map((contact) => (
-            <li key={contact.id}>
-              {contact.name} — {contact.phone}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+          </Row>
+        )}
+      </Col>
+    </Row>
   );
-}
+});
