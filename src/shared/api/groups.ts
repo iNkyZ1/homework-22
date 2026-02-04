@@ -14,7 +14,15 @@ export function fetchGroups(): Promise<Group[]> {
         return;
       }
 
-      resolve(groupsJson as Group[]);
+      const mapped: Group[] = (groupsJson as any[]).map((item) => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        photo: item.photo,
+        contactIds: item.contactIds,
+      }));
+
+      resolve(mapped);
     }, DELAY_MS);
   });
 }

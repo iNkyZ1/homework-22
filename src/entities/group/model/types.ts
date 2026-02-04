@@ -1,6 +1,8 @@
 export type Group = {
   id: string;
   name: string;
+  description: string;
+  photo: string;
   contactIds: string[];
 };
 
