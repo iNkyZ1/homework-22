@@ -1,16 +1,20 @@
-import React, {memo} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {GroupContactsCard} from 'src/components/GroupContactsCard';
+import { useSelector } from "react-redux";
 
-export const GroupListPage = memo<CommonPageProps>(({contactsState, groupContactsState}) => {
+import { selectAllGroups } from "../entities/group/model/selectors";
+import type { RootState } from "../app/store/types";
+
+export function GroupListPage() {
+  const groups = useSelector((state: RootState) => selectAllGroups(state));
+
+  if (groups.length === 0) {
+    return <p>Группы отсутствуют</p>;
+  }
+
   return (
-    <Row xxl={4}>
-      {groupContactsState[0].map((groupContacts) => (
-        <Col key={groupContacts.id}>
-          <GroupContactsCard groupContacts={groupContacts} withLink />
-        </Col>
+    <ul>
+      {groups.map((group) => (
+        <li key={group.id}>{group.name}</li>
       ))}
-    </Row>
+    </ul>
   );
-});
+}

@@ -1,27 +1,24 @@
-import React, {FC, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
-import {ContactDto} from 'src/types/dto/ContactDto';
-import {ContactCard} from 'src/components/ContactCard';
-import {Empty} from 'src/components/Empty';
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+import { selectContactById } from "../entities/contact/model/selectors";
+import type { RootState } from "../app/store/types";
 
-export const ContactPage: FC<CommonPageProps> = ({
-  contactsState
-}) => {
-  const {contactId} = useParams<{ contactId: string }>();
-  const [contact, setContact] = useState<ContactDto>();
+export function ContactPage() {
+  const { contactId } = useParams<{ contactId: string }>();
 
-  useEffect(() => {
-    setContact(() => contactsState[0].find(({id}) => id === contactId));
-  }, [contactId]);
+  const contact = useSelector((state: RootState) =>
+    contactId ? selectContactById(state, contactId) : undefined,
+  );
+
+  if (!contact) {
+    return <p>Контакт не найден</p>;
+  }
 
   return (
-    <Row xxl={3}>
-      <Col className={'mx-auto'}>
-        {contact ? <ContactCard contact={contact} /> : <Empty />}
-      </Col>
-    </Row>
+    <div>
+      <h2>{contact.name}</h2>
+      <p>Телефон: {contact.phone}</p>
+    </div>
   );
-};
+}

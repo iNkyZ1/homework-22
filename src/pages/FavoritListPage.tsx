@@ -1,24 +1,24 @@
-import React, {memo, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {ContactCard} from 'src/components/ContactCard';
-import {ContactDto} from 'src/types/dto/ContactDto';
+import { useSelector } from "react-redux";
 
-export const FavoritListPage = memo<CommonPageProps>(({
-  favoriteContactsState,
-  contactsState
-}) => {
-  const [contacts, setContacts] = useState<ContactDto[]>([])
-  useEffect(() => {
-    setContacts(() => contactsState[0].filter(({id}) => favoriteContactsState[0].includes(id)));
-  }, [contactsState, favoriteContactsState])
-  return (
-    <Row xxl={4} className="g-4">
-      {contacts.map((contact) => (
-        <Col key={contact.id}>
-          <ContactCard contact={contact} withLink />
-        </Col>
-      ))}
-    </Row>
+import { selectFavoriteContacts } from "../features/favorites/model/selectors";
+import type { RootState } from "../app/store/types";
+
+export function FavoritesPage() {
+  const favorites = useSelector((state: RootState) =>
+    selectFavoriteContacts(state),
   );
-})
+
+  if (favorites.length === 0) {
+    return <p>Избранных контактов нет</p>;
+  }
+
+  return (
+    <ul>
+      {favorites.map((contact) => (
+        <li key={contact.id}>
+          {contact.name} — {contact.phone}
+        </li>
+      ))}
+    </ul>
+  );
+}

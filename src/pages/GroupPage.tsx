@@ -1,54 +1,42 @@
-import React, {memo, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
-import {ContactDto} from 'src/types/dto/ContactDto';
-import {GroupContactsDto} from 'src/types/dto/GroupContactsDto';
-import {GroupContactsCard} from 'src/components/GroupContactsCard';
-import {Empty} from 'src/components/Empty';
-import {ContactCard} from 'src/components/ContactCard';
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export const GroupPage = memo<CommonPageProps>(({
-  contactsState,
-  groupContactsState
-}) => {
-  const {groupId} = useParams<{ groupId: string }>();
-  const [contacts, setContacts] = useState<ContactDto[]>([]);
-  const [groupContacts, setGroupContacts] = useState<GroupContactsDto>();
+import { selectGroupById } from "../entities/group/model/selectors";
+import { selectAllContacts } from "../entities/contact/model/selectors";
+import type { RootState } from "../app/store/types";
 
-  useEffect(() => {
-    const findGroup = groupContactsState[0].find(({id}) => id === groupId);
-    setGroupContacts(findGroup);
-    setContacts(() => {
-      if (findGroup) {
-        return contactsState[0].filter(({id}) => findGroup.contactIds.includes(id))
-      }
-      return [];
-    });
-  }, [groupId]);
+export function GroupPage() {
+  const { groupId } = useParams<{ groupId: string }>();
+
+  const group = useSelector((state: RootState) =>
+    groupId ? selectGroupById(state, groupId) : undefined,
+  );
+
+  const contacts = useSelector((state: RootState) => selectAllContacts(state));
+
+  if (!group) {
+    return <p>Группа не найдена</p>;
+  }
+
+  const groupContacts = contacts.filter((contact) =>
+    group.contactIds.includes(contact.id),
+  );
 
   return (
-    <Row className="g-4">
-      {groupContacts ? (
-        <>
-          <Col xxl={12}>
-            <Row xxl={3}>
-              <Col className="mx-auto">
-                <GroupContactsCard groupContacts={groupContacts} />
-              </Col>
-            </Row>
-          </Col>
-          <Col>
-            <Row xxl={4} className="g-4">
-              {contacts.map((contact) => (
-                <Col key={contact.id}>
-                  <ContactCard contact={contact} withLink />
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </>
-      ) : <Empty />}
-    </Row>
+    <div>
+      <h2>{group.name}</h2>
+
+      {groupContacts.length === 0 ? (
+        <p>В группе нет контактов</p>
+      ) : (
+        <ul>
+          {groupContacts.map((contact) => (
+            <li key={contact.id}>
+              {contact.name} — {contact.phone}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
-});
+}
