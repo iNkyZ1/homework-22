@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
-import type { RootState, AppDispatch } from "../app/store/types";
+import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
 
 import {
   selectContactById,
@@ -12,14 +11,12 @@ import { loadContacts } from "../entities/contact/model/thunks";
 
 export function ContactPage() {
   const { contactId } = useParams<{ contactId: string }>();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const loading = useSelector((state: RootState) =>
-    selectContactsLoading(state),
-  );
-  const error = useSelector((state: RootState) => selectContactsError(state));
+  const loading = useAppSelector(selectContactsLoading);
+  const error = useAppSelector(selectContactsError);
 
-  const contact = useSelector((state: RootState) =>
+  const contact = useAppSelector((state) =>
     contactId ? selectContactById(state, contactId) : undefined,
   );
 

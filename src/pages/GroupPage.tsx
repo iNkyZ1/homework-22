@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
-import type { RootState, AppDispatch } from "../app/store/types";
+import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
 
 import {
   selectGroupById,
@@ -19,27 +18,19 @@ import { loadContacts } from "../entities/contact/model/thunks";
 
 export function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const groupsLoading = useSelector((state: RootState) =>
-    selectGroupsLoading(state),
-  );
-  const groupsError = useSelector((state: RootState) =>
-    selectGroupsError(state),
-  );
+  const groupsLoading = useAppSelector(selectGroupsLoading);
+  const groupsError = useAppSelector(selectGroupsError);
 
-  const contactsLoading = useSelector((state: RootState) =>
-    selectContactsLoading(state),
-  );
-  const contactsError = useSelector((state: RootState) =>
-    selectContactsError(state),
-  );
+  const contactsLoading = useAppSelector(selectContactsLoading);
+  const contactsError = useAppSelector(selectContactsError);
 
-  const group = useSelector((state: RootState) =>
+  const group = useAppSelector((state) =>
     groupId ? selectGroupById(state, groupId) : undefined,
   );
 
-  const contacts = useSelector((state: RootState) => selectAllContacts(state));
+  const contacts = useAppSelector(selectAllContacts);
 
   if (groupsLoading || contactsLoading) {
     return <p>Загрузка данных группы...</p>;

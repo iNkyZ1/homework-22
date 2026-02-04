@@ -1,6 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
-
-import type { RootState, AppDispatch } from "../app/store/types";
+import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
 
 import {
   selectContactsError,
@@ -23,24 +21,16 @@ import {
 } from "../features/contacts-filter/model/actions";
 
 export function ContactListPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const loading = useSelector((state: RootState) =>
-    selectContactsLoading(state),
-  );
-  const error = useSelector((state: RootState) => selectContactsError(state));
+  const loading = useAppSelector(selectContactsLoading);
+  const error = useAppSelector(selectContactsError);
 
-  const contacts = useSelector((state: RootState) =>
-    selectFilteredContacts(state),
-  );
-  const groups = useSelector((state: RootState) => selectAllGroups(state));
+  const contacts = useAppSelector(selectFilteredContacts);
+  const groups = useAppSelector(selectAllGroups);
 
-  const filterName = useSelector((state: RootState) =>
-    selectContactsFilterName(state),
-  );
-  const filterGroupId = useSelector((state: RootState) =>
-    selectContactsFilterGroupId(state),
-  );
+  const filterName = useAppSelector(selectContactsFilterName);
+  const filterGroupId = useAppSelector(selectContactsFilterGroupId);
 
   if (loading) {
     return <p>Загрузка контактов...</p>;

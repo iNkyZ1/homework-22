@@ -1,12 +1,9 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../shared/lib/storeHooks";
 
 import { selectFavoriteContacts } from "../features/favorites/model/selectors";
-import type { RootState } from "../app/store/types";
 
 export function FavoritesPage() {
-  const favorites = useSelector((state: RootState) =>
-    selectFavoriteContacts(state),
-  );
+  const favorites = useAppSelector(selectFavoriteContacts);
 
   if (favorites.length === 0) {
     return <p>Избранных контактов нет</p>;

@@ -1,6 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
-
-import type { RootState, AppDispatch } from "../app/store/types";
+import { useAppDispatch, useAppSelector } from "../shared/lib/storeHooks";
 
 import {
   selectAllGroups,
@@ -10,11 +8,11 @@ import {
 import { loadGroups } from "../entities/group/model/thunks";
 
 export function GroupListPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const loading = useSelector((state: RootState) => selectGroupsLoading(state));
-  const error = useSelector((state: RootState) => selectGroupsError(state));
-  const groups = useSelector((state: RootState) => selectAllGroups(state));
+  const loading = useAppSelector(selectGroupsLoading);
+  const error = useAppSelector(selectGroupsError);
+  const groups = useAppSelector(selectAllGroups);
 
   if (loading) {
     return <p>Загрузка групп...</p>;
