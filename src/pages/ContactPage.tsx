@@ -1,9 +1,12 @@
 import React, { memo } from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import type { Contact } from "src/entities/contact/model/types";
 import { FavoriteToggleButton } from "src/features/favorites/model/ui/FavoriteToggleButton";
+
+import { useAppSelector } from "src/shared/lib/storeHooks";
+import { selectContactById } from "src/entities/contact/model/selectors";
 
 interface ContactCardProps {
   contact: Contact;
@@ -41,3 +44,17 @@ export const ContactCard = memo<ContactCardProps>(
     );
   },
 );
+
+export function ContactPage() {
+  const { contactId } = useParams<{ contactId: string }>();
+
+  const contact = useAppSelector((state) =>
+    contactId ? selectContactById(state, contactId) : undefined,
+  );
+
+  if (!contact) {
+    return <p>Контакт не найден</p>;
+  }
+
+  return <ContactCard contact={contact} withLink={false} />;
+}
