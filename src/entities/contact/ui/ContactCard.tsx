@@ -1,17 +1,21 @@
-import React, { memo } from "react";
+import React, { memo, ReactNode } from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import type { Contact } from "src/entities/contact/model/types";
-import { FavoriteToggleButton } from "src/features/favorites";
 
 interface ContactCardProps {
   contact: Contact;
   withLink?: boolean;
+  actionSlot?: ReactNode;
 }
 
 export const ContactCard = memo<ContactCardProps>(
-  ({ contact: { photo, id, name, phone, birthday, address }, withLink }) => {
+  ({
+    contact: { photo, id, name, phone, birthday, address },
+    withLink,
+    actionSlot,
+  }) => {
     return (
       <Card>
         <Card.Img variant="top" src={photo} />
@@ -22,7 +26,7 @@ export const ContactCard = memo<ContactCardProps>(
               {withLink ? <Link to={`/contacts/${id}`}>{name}</Link> : name}
             </span>
 
-            <FavoriteToggleButton contactId={id} />
+            {actionSlot}
           </Card.Title>
 
           <Card.Body>
