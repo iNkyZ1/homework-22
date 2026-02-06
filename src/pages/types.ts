@@ -1,4 +1,4 @@
-import { State } from "src/shared/types/common";
+import { State } from "src/shared/lib/react/common";
 import { ContactDto } from "src/entities/contact/model/ContactDto";
 import { FavoriteContactsDto } from "src/features/favorites/model/FavoriteContactsDto";
 import { GroupContactsDto } from "src/entities/group/model/GroupContactsDto";
