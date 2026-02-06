@@ -1,11 +1,15 @@
-import React, { memo } from "react";
+import React from "react";
 import { Col, Row, Alert } from "react-bootstrap";
 
-import { ContactCard } from "src/entities/contact/ui/ContactCard";
 import { useAppSelector } from "src/shared/lib/storeHooks";
-import { selectFavoriteContacts } from "src/features/favorites/model/selectors";
+import {
+  FavoriteToggleButton,
+  selectFavoriteContacts,
+} from "src/features/favorites";
 
-export const FavoritesPage = memo(() => {
+import { ContactCard } from "src/entities/contact";
+
+export function FavoritesPage() {
   const favorites = useAppSelector(selectFavoriteContacts);
 
   if (favorites.length === 0) {
@@ -16,9 +20,13 @@ export const FavoritesPage = memo(() => {
     <Row xxl={4} className="g-4">
       {favorites.map((contact) => (
         <Col key={contact.id}>
-          <ContactCard contact={contact} withLink />
+          <ContactCard
+            contact={contact}
+            withLink
+            actionSlot={<FavoriteToggleButton contactId={contact.id} />}
+          />
         </Col>
       ))}
     </Row>
   );
-});
+}

@@ -1,27 +1,28 @@
-import React, { memo } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { Col, Row, Alert } from "react-bootstrap";
 
-import { ContactCard } from "src/entities/contact/ui/ContactCard";
-import { GroupContactsCard } from "src/entities/group/ui/GroupContactsCard";
-
 import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 
+import { FavoriteToggleButton } from "src/features/favorites";
+
 import {
+  loadGroups,
   selectGroupById,
   selectGroupsError,
   selectGroupsLoading,
-} from "src/entities/group/model/selectors";
-import { loadGroups } from "src/entities/group/model/thunks";
+  GroupContactsCard,
+} from "src/entities/group";
 
 import {
+  loadContacts,
   selectAllContacts,
   selectContactsError,
   selectContactsLoading,
-} from "src/entities/contact/model/selectors";
-import { loadContacts } from "src/entities/contact/model/thunks";
+  ContactCard,
+} from "src/entities/contact";
 
-export const GroupPage = memo(() => {
+export function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const dispatch = useAppDispatch();
 
@@ -85,7 +86,11 @@ export const GroupPage = memo(() => {
           <Row xxl={4} className="g-4">
             {groupContacts.map((contact) => (
               <Col key={contact.id}>
-                <ContactCard contact={contact} withLink />
+                <ContactCard
+                  contact={contact}
+                  withLink
+                  actionSlot={<FavoriteToggleButton contactId={contact.id} />}
+                />
               </Col>
             ))}
           </Row>
@@ -93,4 +98,4 @@ export const GroupPage = memo(() => {
       </Col>
     </Row>
   );
-});
+}

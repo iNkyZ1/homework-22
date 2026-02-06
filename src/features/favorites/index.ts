@@ -1,5 +1,9 @@
-export * from "./model/actions";
-export * from "./model/selectors";
-export * from "./model/types";
-export { favoritesReducer } from "./model/reducer";
 export { FavoriteToggleButton } from "./ui/FavoriteToggleButton";
+
+export { selectFavoriteContacts, selectIsFavorite } from "./model/selectors";
+
+export { addFavorite, removeFavorite, toggleFavorite } from "./model/actions";
+
+export { favoritesReducer } from "./model/reducer";
+
+export type { FavoriteContactsDto } from "./model/FavoriteContactsDto";

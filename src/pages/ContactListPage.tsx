@@ -1,33 +1,31 @@
 import React, { memo } from "react";
 import { Alert, Col, Row } from "react-bootstrap";
 
-import { ContactCard } from "src/entities/contact/ui/ContactCard";
-import {
-  FilterForm,
-  FilterFormValues,
-} from "src/features/contacts-filter/ui/FilterForm";
-
 import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 
 import {
+  ContactCard,
   selectContactsError,
   selectContactsLoading,
   selectFilteredContacts,
-} from "src/entities/contact/model/selectors";
+} from "src/entities/contact";
+
 import {
   selectAllGroups,
   selectGroupsError,
   selectGroupsLoading,
-} from "src/entities/group/model/selectors";
+} from "src/entities/group";
 
 import {
-  setContactsFilterGroup,
-  setContactsFilterName,
-} from "src/features/contacts-filter/model/actions";
-import {
+  FilterForm,
+  FilterFormValues,
   selectContactsFilterGroupId,
   selectContactsFilterName,
-} from "src/features/contacts-filter/model/selectors";
+  setContactsFilterGroup,
+  setContactsFilterName,
+} from "src/features/contacts-filter";
+
+import { FavoriteToggleButton } from "src/features/favorites";
 
 export const ContactListPage = memo(() => {
   const dispatch = useAppDispatch();
@@ -69,11 +67,17 @@ export const ContactListPage = memo(() => {
           <Alert variant="info">Загрузка контактов...</Alert>
         ) : error ? (
           <Alert variant="danger">Ошибка: {error}</Alert>
+        ) : contacts.length === 0 ? (
+          <Alert variant="secondary">Контактов нет</Alert>
         ) : (
           <Row xxl={4} className="g-4">
             {contacts.map((contact) => (
               <Col key={contact.id}>
-                <ContactCard contact={contact} withLink />
+                <ContactCard
+                  contact={contact}
+                  withLink
+                  actionSlot={<FavoriteToggleButton contactId={contact.id} />}
+                />
               </Col>
             ))}
           </Row>
