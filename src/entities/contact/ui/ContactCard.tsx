@@ -3,7 +3,7 @@ import { Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import type { Contact } from "src/entities/contact/model/types";
-import { FavoriteToggleButton } from "src/features/favorites/model/ui/FavoriteToggleButton";
+import { FavoriteToggleButton } from "src/features/favorites";
 
 interface ContactCardProps {
   contact: Contact;
