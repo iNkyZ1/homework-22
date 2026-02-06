@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import React, { memo } from "react";
 import { FormikConfig } from "formik/dist/types";
-import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
+import { GroupContactsDto } from "src/entities/group/model/GroupContactsDto";
 
 export interface FilterFormValues {
   name: string;

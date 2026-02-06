@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
+import { GroupContactsDto } from "src/entities/group/model/GroupContactsDto";
 
 interface GroupContactsCardProps {
   groupContacts: GroupContactsDto;
