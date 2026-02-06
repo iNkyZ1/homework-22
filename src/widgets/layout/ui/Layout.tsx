@@ -2,8 +2,8 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
 
-import { MainMenu } from "./MainMenu";
-import { Breadcrumbs } from "src/components/Breadcrumbs";
+import { MainMenu } from "../../main-menu/ui/MainMenu";
+import { Breadcrumbs } from "src/shared/ui/breadcrumbs/Breadcrumbs";
 
 export const Layout = () => {
   const location = useLocation();

@@ -2,8 +2,8 @@ import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import { Col, Row, Alert } from "react-bootstrap";
 
-import { ContactCard } from "src/components/ContactCard";
-import { GroupContactsCard } from "src/components/GroupContactsCard";
+import { ContactCard } from "src/entities/contact/ui/ContactCard";
+import { GroupContactsCard } from "src/entities/group/ui/GroupContactsCard";
 
 import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 

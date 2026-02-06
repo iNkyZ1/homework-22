@@ -1,8 +1,11 @@
 import React, { memo } from "react";
 import { Alert, Col, Row } from "react-bootstrap";
 
-import { ContactCard } from "src/components/ContactCard";
-import { FilterForm, FilterFormValues } from "src/components/FilterForm";
+import { ContactCard } from "src/entities/contact/ui/ContactCard";
+import {
+  FilterForm,
+  FilterFormValues,
+} from "src/features/contacts-filter/ui/FilterForm";
 
 import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 

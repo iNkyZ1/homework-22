@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { ContactCard } from "src/components/ContactCard";
+import { ContactCard } from "src/entities/contact/ui/ContactCard";
 import { useAppSelector } from "src/shared/lib/storeHooks";
 import { selectContactById } from "src/entities/contact/model/selectors";
 

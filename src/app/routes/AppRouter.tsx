@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 
 import { useAppDispatch } from "src/shared/lib/storeHooks";
 
-import { Layout } from "src/components/Layout";
+import { Layout } from "src/widgets/layout/ui/Layout";
 import {
   ContactListPage,
   ContactPage,

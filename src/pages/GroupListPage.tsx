@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Col, Row, Alert } from "react-bootstrap";
 
-import { GroupContactsCard } from "src/components/GroupContactsCard";
+import { GroupContactsCard } from "src/entities/group/ui/GroupContactsCard";
 
 import { useAppDispatch, useAppSelector } from "src/shared/lib/storeHooks";
 
