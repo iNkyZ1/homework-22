@@ -1,4 +1,4 @@
-import groupsJson from "../../__data__/group-contacts.json";
+import groupsJson from "./mock/group-contacts.json";
 
 import type { Group } from "../../entities/group/model/types";
 

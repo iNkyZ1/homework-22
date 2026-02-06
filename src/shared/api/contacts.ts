@@ -1,4 +1,4 @@
-import contactsJson from "../../__data__/contacts.json";
+import contactsJson from "./mock/contacts.json";
 
 import type { Contact } from "../../entities/contact/model/types";
 
