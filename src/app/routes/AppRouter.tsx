@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import { useAppDispatch } from "src/shared/lib/storeHooks";
 
 import { Layout } from "src/components/Layout";
-
 import {
   ContactListPage,
   ContactPage,
@@ -16,7 +15,7 @@ import {
 import { loadContacts } from "src/entities/contact/model/thunks";
 import { loadGroups } from "src/entities/group/model/thunks";
 
-export function MainApp() {
+export function AppRouter() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
